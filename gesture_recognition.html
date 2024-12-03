@@ -217,6 +217,7 @@
           } else {
             window.ReactNativeWebView.postMessage(
               JSON.stringify({
+                results: results,
                 gesture: categoryName,
                 confidence: categoryScore,
                 handedness: handedness,
