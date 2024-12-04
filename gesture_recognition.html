@@ -48,6 +48,7 @@
           ></canvas>
           <p id="gesture_output" class="output"></p>
         </div>
+        <div id="output">Transcription will appear here...</div>
       </div>
     </section>
 
@@ -77,6 +78,43 @@
         p.textContent = message;
         debugContainer.appendChild(p);
         console.log(message); // Also log to the console for developers
+      };
+      const outputDiv = document.getElementById("output");
+      const recognition = new (window.SpeechRecognition ||
+        window.webkitSpeechRecognition)();
+      
+      recognition.lang = "en-US"; // Set the language
+      recognition.interimResults = true; // Show intermediate results
+      recognition.continuous = true; // Keep listening continuously
+
+      // Handle speech recognition results
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript + " ";
+        }
+        outputDiv.innerText = `Transcript: ${transcript}`;
+        console.log(`Transcript: ${transcript}`);
+
+        // Send data back to React Native WebView
+        if (window.ReactNativeWebView) {
+          window.ReactNativeWebView.postMessage(
+            JSON.stringify({
+              transcript,
+            })
+          );
+        }
+      };
+
+      // Handle errors
+      recognition.onerror = (event) => {
+        console.error("Error:", event.error);
+      };
+
+      // Automatically restart recognition when it stops
+      recognition.onend = () => {
+        console.log("Speech recognition stopped, restarting...");
+        recognition.start();
       };
 
       const createGestureRecognizer = async () => {
@@ -244,6 +282,8 @@
           enableCam();
         } else if (message === "stopRecognition") {
           enableCam();
+        } else if (message === "startTTS") {
+          recognition.start();
         }
       });
     </script>
