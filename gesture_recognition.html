@@ -50,11 +50,11 @@
         </div>
       </div>
     </section>
-
+    <div id="output">Transcription will appear here...</div>
     <div id="debugger">
       <h3>Debug Messages</h3>
     </div>
-   <div id="output">Transcription will appear here...</div>
+   
     <script type="module">
       import {
         GestureRecognizer,
@@ -256,9 +256,11 @@
             window.ReactNativeWebView.postMessage(
               JSON.stringify({
                 message: "gesture",
-                data: {gesture: categoryName,
-                confidence: categoryScore,
-                handedness: handedness}
+                data: {
+                  gesture: categoryName,
+                  confidence: categoryScore,
+                  handedness: handedness,
+                },
               })
             );
           }
