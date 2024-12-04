@@ -48,14 +48,13 @@
           ></canvas>
           <p id="gesture_output" class="output"></p>
         </div>
-        <div id="output">Transcription will appear here...</div>
       </div>
     </section>
 
     <div id="debugger">
       <h3>Debug Messages</h3>
     </div>
-
+   <div id="output">Transcription will appear here...</div>
     <script type="module">
       import {
         GestureRecognizer,
@@ -254,13 +253,13 @@
               "window.ReactNativeWebView is not defined. Please run this code in a WebView."
             );
           } else {
-            window.ReactNativeWebView.postMessage({
-              message: "gesture",
-              data: JSON.stringify({
-                gesture: categoryName,
+            window.ReactNativeWebView.postMessage(
+              JSON.stringify({
+                message: "gesture",
+                data: {gesture: categoryName,
                 confidence: categoryScore,
-                handedness: handedness,
-              })}
+                handedness: handedness}
+              })
             );
           }
 
